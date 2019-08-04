@@ -1,3 +1,5 @@
+let tasks = [];
+
 (getTasks = async () => {
     let response = await fetch("api/tasks");
     let json = await response.json();
@@ -8,10 +10,17 @@
     }
 
     for (let i = 0; i < json.length; i++)
-        myUL.appendChild(createNewLI(json[i]));
+        createNewLI(myUL, json[i]);
 })();
 
-createNewLI = (task) => {
+createNewLI = (myUL, task) => {
+    if (!task.hasOwnProperty("id") ||
+        !task.hasOwnProperty("content") ||
+        !task.hasOwnProperty("removed"))
+        return;
+
+    tasks.push(task);
+
     let li = document.createElement("li");
     li.setAttribute("data-taskid", task.id);
     li.innerHTML = task.content;
@@ -55,14 +64,21 @@ createNewLI = (task) => {
         }
     });
 
-    return li;
+    myUL.appendChild(li);
 };
 
 onAddClick = () => {
     let inputValue = document.getElementById("myInput").value;
 
-    if (inputValue.toString().length < 3 || inputValue.toString().length > 50) {
+    if (inputValue.toString().length < 3 || inputValue.toString().length > 255) {
         alert("Incorrect task length!");
+        return;
+    }
+
+    if (tasks.find(obj => {return obj.content === inputValue}) !== undefined) {
+        let dialog = document.getElementById("dialog");
+        document.getElementById("closeDialog").onclick = () => {dialog.close()};
+        dialog.show();
         return;
     }
 
@@ -73,7 +89,7 @@ onAddClick = () => {
     }).then((response) => {
         return response.json();
     }).then((myJson) => {
-        document.getElementById("myUL").appendChild(createNewLI(myJson));
+        createNewLI(document.getElementById("myUL"), myJson);
     });
 
     document.getElementById("myInput").value = "";

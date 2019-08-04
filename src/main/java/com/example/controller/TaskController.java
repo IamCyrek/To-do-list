@@ -3,7 +3,6 @@ package com.example.controller;
 import com.example.model.Task;
 
 import com.example.service.TaskService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;

@@ -20,11 +20,22 @@ public class TaskService {
         return taskRepository.findAllByOrderByIdAsc();
     }
 
+    private void taskValidation(final Task task) {
+        taskRepository.findTaskByContent(task.getContent())
+                .ifPresent(smth -> {
+                    throw new IllegalArgumentException("Task with content '" + smth.getContent() + "' already exists!");
+                });
+    }
+
     public Task createTask(final Task task) {
+        taskValidation(task);
+
         return taskRepository.save(task);
     }
 
     public Task updateTask(final Long taskId, final Task taskDetails) {
+        taskValidation(taskDetails);
+
         return taskRepository.findById(taskId)
                 .map(oldTask -> {
                     oldTask.setContent(taskDetails.getContent());

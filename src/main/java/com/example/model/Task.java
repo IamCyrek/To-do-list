@@ -14,9 +14,9 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     @NotBlank
-    @Size(min = 3, max = 50)
+    @Size(min = 3, max = 255)
     private String content;
 
     @Column(nullable = false)
