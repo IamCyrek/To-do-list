@@ -20,25 +20,26 @@ public class TaskService {
         return taskRepository.findAllByOrderByIdAsc();
     }
 
-    private void taskValidation(final Task task) {
+    public Task createTask(final Task task) {
         taskRepository.findTaskByContent(task.getContent())
                 .ifPresent(smth -> {
                     throw new IllegalArgumentException("Task with content '" + smth.getContent() + "' already exists!");
                 });
-    }
-
-    public Task createTask(final Task task) {
-        taskValidation(task);
 
         return taskRepository.save(task);
     }
 
     public Task updateTask(final Long taskId, final Task taskDetails) {
-        taskValidation(taskDetails);
+        taskRepository.findTaskByContentAndIdIsNot(taskDetails.getContent(), taskId)
+                .ifPresent(smth -> {
+                    throw new IllegalArgumentException("Task with content '" + smth.getContent() + "' already exists!");
+                });
 
         return taskRepository.findById(taskId)
                 .map(oldTask -> {
                     oldTask.setContent(taskDetails.getContent());
+                    oldTask.setPriority(taskDetails.getPriority());
+                    oldTask.setCreationTime(taskDetails.getCreationTime());
                     oldTask.setRemoved(taskDetails.isRemoved());
                     return taskRepository.save(oldTask);
                 }).orElseThrow(() -> new ResourceNotFoundException("Task with id = " + taskId + " not found."));
