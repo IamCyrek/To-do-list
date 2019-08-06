@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="02" author="IamCyrek">
+        <comment>Inserting tasks</comment>
+        <insert tableName="task">
+            <column name="content" value="My first task"/>
+            <column name="priority" valueNumeric="0"/>
+            <column name="creation_time" value="2019-08-06T22:01:25"/>
+            <column name="is_removed" valueBoolean="false"/>
+        </insert>
+        <insert tableName="task">
+            <column name="content" value="My second task"/>
+            <column name="priority" valueNumeric="1"/>
+            <column name="creation_time" value="2019-08-07T08:15:56"/>
+            <column name="is_removed" valueBoolean="true"/>
+        </insert>
+        <insert tableName="task">
+            <column name="content" value="My third task"/>
+            <column name="priority" valueNumeric="2"/>
+            <column name="creation_time" value="2019-08-08T20:02:34"/>
+            <column name="is_removed" valueBoolean="false"/>
+        </insert>
+        <insert tableName="task">
+            <column name="content" value="My fourth task"/>
+            <column name="priority" valueNumeric="3"/>
+            <column name="creation_time" value="2019-08-09T21:03:05"/>
+            <column name="is_removed" valueBoolean="false"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
