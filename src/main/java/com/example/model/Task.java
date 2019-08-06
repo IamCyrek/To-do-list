@@ -24,7 +24,7 @@ public class Task {
 
     @Column(nullable = false)
     @NotNull
-    @Max(4)
+    @Max(3)
     private int priority;
 
     @Column(nullable = false)

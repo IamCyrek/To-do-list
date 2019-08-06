@@ -3,19 +3,90 @@
     box-sizing: border-box;
 }
 
-/* Remove margins and padding from the list */
-ul {
-    margin: 0;
-    padding: 0;
+.header {
+    background-color: #ef5350;
+    color: #f5f5f5;
+    padding: 30px 40px;
+    text-align: center;
 }
 
-/* Style the list items */
-ul li {
+/* Clear floats after the header and each row*/
+.header:after, .divRow:after, .divHeader:after {
+    clear: both;
+    content: "";
+    display: table;
+}
+
+input {
+    background: #f5f5f5;
+    border: none;
+    border-radius: 0;
+    float: left;
+    font-size: 16px;
+    margin: 0;
+    padding: 10px;
+    width: 70%;
+}
+
+.addBtn {
+    font-size: 16px;
+}
+
+.addPrioritySelect {
+    font-size: 14px;
+}
+
+.addBtn, .closeDialogBtn, .addPrioritySelect {
+    background: #e0e0e0;
+    border: none;
+    border-radius: 0;
+    color: #424242;
     cursor: pointer;
-    position: relative;
-    padding: 12px 8px 12px 40px;
-    background: #eee;
+    text-align: center;
+    transition: 0.3s;
+    width: 15%;
+}
+
+.addBtn:hover, .closeDialogBtn:hover, .addPrioritySelect:hover {
+    background-color: #bdbdbd;
+}
+
+.addBtn, .addPrioritySelect {
+    float: left;
+    padding: 10px;
+}
+
+.closeDialogBtn {
+    float: right;
+    padding: 5px;
+}
+
+.dialog {
+    bottom: 0;
+    position:fixed;
+    width:100%;
+    z-index:99999;
+}
+
+.dialog > p {
+    float: left;
+    font-size: 16px;
+    margin: 0;
+    padding: 5px;
+}
+
+.divHeader {
+    background: #ef9a9a;
+}
+
+.divRow {
+    background: #fafafa;
+}
+
+.divRow, .divHeader {
+    cursor: pointer;
     font-size: 18px;
+    position: relative;
     transition: 0.2s;
 
     /* make the list items unselectable */
@@ -25,110 +96,82 @@ ul li {
     user-select: none;
 }
 
-/* Set all odd list items to a different color (zebra-stripes) */
-ul li:nth-child(odd) {
-    background: #f9f9f9;
+/* Set all odd items to a different color (zebra-stripes) */
+.divRow:nth-child(odd) {
+    background: #eeeeee;
 }
 
 /* Darker background-color on hover */
-ul li:hover {
-    background: #ddd;
+.divRow:hover {
+    background: #e0e0e0;
 }
 
-/* When clicked on, add a background color and strike out text */
-ul li.checked {
-    background: #888;
-    color: #fff;
+.divRow.checked {
+    background: #bdbdbd;
+    /*color: #E6C9C1;*/
+}
+
+.divRow.checked > .divTask {
     text-decoration: line-through;
 }
 
 /* Add a "checked" mark when clicked on */
-ul li.checked::before {
-    content: '';
-    position: absolute;
+.divRow.checked::before {
     border-color: #fff;
     border-style: solid;
     border-width: 0 2px 2px 0;
-    top: 10px;
-    left: 16px;
-    transform: rotate(45deg);
+    content: '';
     height: 15px;
+    left: 16px;
+    position: absolute;
+    top: 10px;
+    transform: rotate(45deg);
     width: 7px;
 }
 
-/* Style the close button */
+.divTask, .divPriority, .divTime {
+    float: left;
+    padding-bottom: 12px;
+    padding-top: 12px;
+}
+
+.divTask {
+    padding-left: 40px;
+    width: 50%;
+}
+
+.divPriority {
+    padding-left: 8px;
+    width: 15%;
+}
+
+.divTime {
+    padding-left: 8px;
+    padding-right: 36px;
+    width: 35%;
+}
+
+#divTaskHeader, #divPriorityHeader, #divTimeHeader {
+    text-align: center;
+    z-index: 100;
+}
+
+#divTimeHeader {
+    padding-left: 36px;
+}
+
+.filter {
+    background-color: #e57373;
+}
+
 .close {
+    padding: 12px 16px 12px 16px;
     position: absolute;
     right: 0;
     top: 0;
-    padding: 12px 16px 12px 16px;
 }
 
 .close:hover {
-    background-color: #f44336;
-    color: white;
-}
-
-/* Style the header */
-.header {
-    background-color: #f44336;
-    padding: 30px 40px;
-    color: white;
-    text-align: center;
-}
-
-/* Clear floats after the header */
-.header:after {
-    content: "";
-    display: table;
-    clear: both;
-}
-
-/* Style the input */
-input {
-    margin: 0;
-    border: none;
-    border-radius: 0;
-    width: 75%;
-    padding: 10px;
-    float: left;
-    font-size: 16px;
-}
-
-/* Style the "Add" button */
-.addBtn, #closeDialog {
-    padding: 10px;
-    width: 25%;
-    background: #d9d9d9;
-    color: #555;
-    float: left;
-    text-align: center;
-    font-size: 16px;
-    cursor: pointer;
-    transition: 0.3s;
-    border-radius: 0;
-}
-
-.addBtn:hover, #closeDialog:hover {
-    background-color: #bbb;
-}
-
-#dialog {
-    bottom: 0;
-    position:fixed;
-    width:100%;
-    z-index:99999;
-}
-
-#dialog > p {
-    float: left;
-    font-size: 16px;
-    margin: 0;
-    padding: 5px;
-}
-
-#closeDialog {
-    border: none;
-    float: right;
-    padding: 5px;
+    background-color: #ef5350;
+    color: #f5f5f5;
 }

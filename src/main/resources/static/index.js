@@ -4,92 +4,149 @@ let tasks = [];
     let response = await fetch("api/tasks");
     let json = await response.json();
 
-    let myUL = document.getElementById("myUL");
-    while (myUL.firstChild) {
-        myUL.removeChild(myUL.firstChild)
-    }
-
     for (let i = 0; i < json.length; i++)
-        createNewLI(myUL, json[i]);
+        createNewRow(document.getElementById("taskList"), json[i], true);
 })();
 
-createNewLI = (myUL, task) => {
-    if (!task.hasOwnProperty("id") ||
+
+
+taskHasAllProperties = (task) => {
+    return !(!task.hasOwnProperty("id") ||
         !task.hasOwnProperty("content") ||
-        !task.hasOwnProperty("removed"))
+        !task.hasOwnProperty("priority") ||
+        !task.hasOwnProperty("creationTime") ||
+        !task.hasOwnProperty("removed"));
+};
+
+createNewRow = (taskList, task, isAdd) => {
+    if (!taskHasAllProperties(task))
         return;
 
-    tasks.push(task);
+    if (isAdd)
+        tasks.push(task);
 
-    let li = document.createElement("li");
-    li.setAttribute("data-taskid", task.id);
-    li.innerHTML = task.content;
+    let priority = "<span style='color:red'>Critical</span>";
+    if (task.priority === 0)
+        priority = "<span style='color:green'>Low</span>";
+    else if (task.priority === 1)
+        priority = "<span style='color:blue'>Normal</span>";
+    else if (task.priority === 2)
+        priority = "<span style='color:yellow'>High</span>";
+
+    Number.prototype.padLeft = function(base, chr) {
+        let len = (String(base || 10).length - String(this).length) + 1;
+        return len > 0 ? new Array(len).join(chr || '0') + this : this;
+    };
+
+    let date = new Date(task.creationTime);
+    let creationTime =
+        [date.getHours().padLeft(), date.getMinutes().padLeft(), date.getSeconds().padLeft()].join(':')+ ' ' +
+        [date.getDate().padLeft(), (date.getMonth() + 1).padLeft(), date.getFullYear().padLeft()].join('.');
+
+    let divRow = document.createElement("div");
+    divRow.setAttribute("data-taskid", task.id);
+    divRow.className = "divRow";
+    divRow.innerHTML =
+        "<div class='divTask'>" + task.content + "</div>" +
+        "<div class='divPriority'>" + priority + "</div>" +
+        "<div class='divTime'>" + creationTime + "</div>";
     if (task.removed)
-        li.classList.add("checked");
+        divRow.classList.add("checked");
 
     let span = document.createElement("SPAN");
     let txt = document.createTextNode("\u00D7");
     span.className = "close";
     span.appendChild(txt);
     span.onclick = function() {
-        fetch("api/tasks?id=" + this.parentElement.getAttribute("data-taskid"), {
+        let taskid = parseInt(this.parentElement.getAttribute("data-taskid"));
+
+        fetch("api/tasks?id=" + taskid, {
             method: "DELETE"
         }).then((response) => {
             return response.json();
         }).then((myJson) => {
-            console.log(myJson);
-            this.parentElement.parentElement.removeChild(this.parentElement);
+            if (myJson.hasOwnProperty("deleted") && myJson.deleted === true) {
+                tasks = tasks.filter(obj => obj.id !== taskid);
+                this.parentElement.parentElement.removeChild(this.parentElement);
+            }
         });
     };
-    li.appendChild(span);
+    divRow.appendChild(span);
 
-    li.addEventListener('click', function(ev) {
-        if (ev.target.tagName === 'LI') {
-            let removed = true;
-            if (ev.target.classList.contains("checked"))
-                removed = false;
+    divRow.addEventListener('click', function(ev) {
+        if (ev.target.tagName === 'DIV') {
 
-            fetch("api/tasks?id=" + this.getAttribute("data-taskid"), {
+            let task = tasks.find(obj => obj.id === parseInt(this.getAttribute("data-taskid")));
+
+            fetch("api/tasks?id=" + task.id, {
                 method: "PUT",
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({content: this.textContent.slice(0, -1), removed: removed})
+                body: JSON.stringify({
+                    content: task.content,
+                    priority: task.priority,
+                    creationTime: task.creationTime,
+                    removed: !task.removed
+                })
             }).then((response) => {
                 return response.json();
             }).then((myJson) => {
-                if (myJson.removed)
-                    ev.target.classList.add("checked");
-                else
-                    ev.target.classList.remove("checked");
+                if (taskHasAllProperties(myJson)) {
+                    task.content = myJson.content;
+                    task.priority = myJson.priority;
+                    task.creationTime = myJson.creationTime;
+                    task.removed = myJson.removed;
+
+                    if (ev.target.parentElement.classList.contains("checked") && !task.removed)
+                        ev.target.parentElement.classList.remove("checked");
+                    else if (task.removed)
+                        ev.target.parentElement.classList.add("checked");
+                }
             });
         }
     });
 
-    myUL.appendChild(li);
+    taskList.appendChild(divRow);
+};
+
+
+
+showDialog = (text) => {
+    document.getElementById("closeDialogMessage").innerHTML = text;
+
+    let dialog = document.getElementById("dialog");
+    document.getElementById("closeDialogButton").onclick = () => {dialog.close()};
+
+    dialog.show();
 };
 
 onAddClick = () => {
+    let prioritySelect = document.getElementById("addPrioritySelect");
+    let priority = prioritySelect.options[prioritySelect.selectedIndex].value;
     let inputValue = document.getElementById("myInput").value;
 
     if (inputValue.toString().length < 3 || inputValue.toString().length > 255) {
-        alert("Incorrect task length!");
+        showDialog("Incorrect task length!");
         return;
     }
 
     if (tasks.find(obj => {return obj.content === inputValue}) !== undefined) {
-        let dialog = document.getElementById("dialog");
-        document.getElementById("closeDialog").onclick = () => {dialog.close()};
-        dialog.show();
+        showDialog("This task name is already in use!");
         return;
     }
 
     fetch("api/tasks", {
         method: "POST",
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({content: inputValue, removed: false})
+        body: JSON.stringify({
+            content: inputValue,
+            priority: priority,
+            creationTime: +new Date(),
+            removed: false
+        })
     }).then((response) => {
         return response.json();
     }).then((myJson) => {
-        createNewLI(document.getElementById("myUL"), myJson);
+        createNewRow(document.getElementById("taskList"), myJson, true);
     });
 
     document.getElementById("myInput").value = "";

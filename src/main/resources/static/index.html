@@ -10,14 +10,28 @@
 <div id="myDIV" class="header">
     <h2>My To Do List</h2>
     <input type="text" id="myInput" placeholder="Title...">
+    <div>
+        <select id="addPrioritySelect" class="addPrioritySelect">
+            <option value="0">Low</option>
+            <option value="1">Normal</option>
+            <option value="2">High</option>
+            <option value="3">Critical</option>
+        </select>
+    </div>
     <span onclick="onAddClick()" class="addBtn">Add</span>
 </div>
 
-<ul id="myUL"></ul>
+<div id="taskList">
+    <div class="divHeader">
+        <div id="divTaskHeader" class="divTask" onclick="divTaskHeaderClick()">Task</div>
+        <div id="divPriorityHeader" class="divPriority" onclick="divPriorityHeaderClick()">Priority</div>
+        <div id="divTimeHeader" class="divTime filter" onclick="divTimeHeaderClick()">Time</div>
+    </div>
+</div>
 
-<dialog id="dialog">
-    <p>This task name is already in use!</p>
-    <button id="closeDialog">OK</button>
+<dialog id="dialog" class="dialog">
+    <p id="closeDialogMessage"></p>
+    <button id="closeDialogButton" class="closeDialogBtn">OK</button>
 </dialog>
 
 </body>
