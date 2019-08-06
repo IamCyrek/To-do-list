@@ -151,3 +151,113 @@ onAddClick = () => {
 
     document.getElementById("myInput").value = "";
 };
+
+
+
+removeAllRows = () => {
+    let rows = document.getElementsByClassName("divRow");
+
+    while(rows[0]) {
+        rows[0].parentNode.removeChild(rows[0]);
+    }
+};
+
+createRows = () => {
+    for (let i = 0; i < tasks.length; i++)
+        createNewRow(document.getElementById("taskList"), tasks[i], false);
+};
+
+let isAscSort = true;
+
+taskHeaderAscSort = (a, b) => {
+    if (a.content > b.content)
+        return 1;
+
+    if (a.content < b.content)
+        return -1;
+
+    return 0;
+};
+
+divTaskHeaderClick = () => {
+    removeAllRows();
+
+    if (!document.getElementById("divTaskHeader").classList.contains("filter")) {
+        document.getElementById("divTaskHeader").classList.add("filter");
+        document.getElementById("divPriorityHeader").classList.remove("filter");
+        document.getElementById("divTimeHeader").classList.remove("filter");
+
+        isAscSort = true;
+    } else {
+        isAscSort = !isAscSort;
+    }
+
+    if (isAscSort)
+        tasks.sort(taskHeaderAscSort);
+    else
+        tasks.sort((a, b) => taskHeaderAscSort(a, b) * -1);
+
+    createRows();
+};
+
+priorityHeaderAscSort = (a, b) => {
+    if (a.priority > b.priority)
+        return 1;
+
+    if (a.priority < b.priority)
+        return -1;
+
+    return 0;
+};
+
+divPriorityHeaderClick = () => {
+    removeAllRows();
+
+    if (!document.getElementById("divPriorityHeader").classList.contains("filter")) {
+        document.getElementById("divTaskHeader").classList.remove("filter");
+        document.getElementById("divPriorityHeader").classList.add("filter");
+        document.getElementById("divTimeHeader").classList.remove("filter");
+
+        isAscSort = true;
+    } else {
+        isAscSort = !isAscSort;
+    }
+
+    if (isAscSort)
+        tasks.sort(priorityHeaderAscSort);
+    else
+        tasks.sort((a, b) => priorityHeaderAscSort(a, b) * -1);
+
+    createRows();
+};
+
+timeHeaderAscSort = (a, b) => {
+    if (a.creationTime > b.creationTime)
+        return 1;
+
+    if (a.creationTime < b.creationTime)
+        return -1;
+
+    return 0;
+};
+
+divTimeHeaderClick = () => {
+    removeAllRows();
+
+    if (!document.getElementById("divTimeHeader").classList.contains("filter")) {
+        document.getElementById("divTaskHeader").classList.remove("filter");
+        document.getElementById("divPriorityHeader").classList.remove("filter");
+        document.getElementById("divTimeHeader").classList.add("filter");
+
+        isAscSort = true;
+    } else {
+        isAscSort = !isAscSort;
+    }
+
+    if (isAscSort)
+        tasks.sort(timeHeaderAscSort);
+    else
+        tasks.sort((a, b) => timeHeaderAscSort(a, b) * -1);
+
+    createRows();
+};
