@@ -8,4 +8,5 @@
 
     <include file="01-create-tasks-schema.xml" relativeToChangelogFile="true"/>
     <include file="02-insert-data-tasks.xml" relativeToChangelogFile="true"/>
+    <include file="03-create-users-schema-and-update-tasks.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>
