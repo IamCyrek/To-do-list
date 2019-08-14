@@ -1,7 +1,6 @@
 package com.example.controller;
 
-import com.example.model.Task;
-
+import com.example.model.dto.TaskDTO;
 import com.example.service.TaskService;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,19 +20,18 @@ public class TaskController {
     }
 
     @GetMapping
-    public List<Task> getAllTasks() {
+    public List<TaskDTO> getAllTasks() {
         return taskService.getAllTasks();
     }
 
     @PostMapping
-    public Task createTask(@Valid @RequestBody Task task) {
-        return taskService.createTask(task);
+    public TaskDTO createTask(@Valid @RequestBody TaskDTO taskDTO) {
+        return taskService.createTask(taskDTO);
     }
 
     @PutMapping
-    public Task updateTask(@RequestParam(value = "id") Long taskId,
-                           @Valid @RequestBody Task taskDetails) {
-        return taskService.updateTask(taskId, taskDetails);
+    public TaskDTO updateTask(@Valid @RequestBody TaskDTO taskDTO) {
+        return taskService.updateTask(taskDTO);
     }
 
     @DeleteMapping
