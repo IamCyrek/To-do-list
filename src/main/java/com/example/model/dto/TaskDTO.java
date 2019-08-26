@@ -1,5 +1,6 @@
 package com.example.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import javax.validation.constraints.Max;
@@ -11,7 +12,7 @@ import java.util.Date;
 @Data
 public class TaskDTO {
 
-    private long id;
+    private Long id;
 
     @NotBlank
     @Size(min = 3, max = 255)
@@ -19,17 +20,14 @@ public class TaskDTO {
 
     @NotNull
     @Max(3)
-    private int priority;
+    private Integer priority;
 
     @NotNull
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     private Date creationTime;
 
-    private boolean isRemoved;
+    private Boolean isRemoved;
 
-    private long userId;
-
-    @NotBlank
-    @Size(min = 3, max = 255)
-    private String name;
+    private Long userId;
 
 }

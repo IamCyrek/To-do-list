@@ -15,7 +15,8 @@ taskHasAllProperties = (task) => {
         !task.hasOwnProperty("content") ||
         !task.hasOwnProperty("priority") ||
         !task.hasOwnProperty("creationTime") ||
-        !task.hasOwnProperty("removed"));
+        !task.hasOwnProperty("isRemoved") ||
+        !task.hasOwnProperty("userId"));
 };
 
 createNewRow = (taskList, task, isAdd) => {
@@ -38,19 +39,20 @@ createNewRow = (taskList, task, isAdd) => {
         return len > 0 ? new Array(len).join(chr || '0') + this : this;
     };
 
-    let date = new Date(task.creationTime);
+    let date = new Date((new Date(task.creationTime)).getTime() - (new Date()).getTimezoneOffset() * 60000);
     let creationTime =
         [date.getHours().padLeft(), date.getMinutes().padLeft(), date.getSeconds().padLeft()].join(':')+ ' ' +
         [date.getDate().padLeft(), (date.getMonth() + 1).padLeft(), date.getFullYear().padLeft()].join('.');
 
     let divRow = document.createElement("div");
     divRow.setAttribute("data-taskid", task.id);
+    divRow.setAttribute("data-userid", task.userId);
     divRow.className = "divRow";
     divRow.innerHTML =
         "<div class='divTask'>" + task.content + "</div>" +
         "<div class='divPriority'>" + priority + "</div>" +
         "<div class='divTime'>" + creationTime + "</div>";
-    if (task.removed)
+    if (task.isRemoved)
         divRow.classList.add("checked");
 
     let span = document.createElement("SPAN");
@@ -78,14 +80,16 @@ createNewRow = (taskList, task, isAdd) => {
 
             let task = tasks.find(obj => obj.id === parseInt(this.getAttribute("data-taskid")));
 
-            fetch("api/tasks?id=" + task.id, {
+            fetch("api/tasks", {
                 method: "PUT",
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
+                    id: task.id,
                     content: task.content,
                     priority: task.priority,
                     creationTime: task.creationTime,
-                    removed: !task.removed
+                    isRemoved: !task.isRemoved,
+                    userId: task.userId
                 })
             }).then((response) => {
                 return response.json();
@@ -94,11 +98,12 @@ createNewRow = (taskList, task, isAdd) => {
                     task.content = myJson.content;
                     task.priority = myJson.priority;
                     task.creationTime = myJson.creationTime;
-                    task.removed = myJson.removed;
+                    task.isRemoved = myJson.isRemoved;
+                    task.userId = myJson.userId;
 
-                    if (ev.target.parentElement.classList.contains("checked") && !task.removed)
+                    if (ev.target.parentElement.classList.contains("checked") && !task.isRemoved)
                         ev.target.parentElement.classList.remove("checked");
-                    else if (task.removed)
+                    else if (task.isRemoved)
                         ev.target.parentElement.classList.add("checked");
                 }
             });
@@ -141,7 +146,8 @@ onAddClick = () => {
             content: inputValue,
             priority: priority,
             creationTime: +new Date(),
-            removed: false
+            isRemoved: false,
+            userId: 1
         })
     }).then((response) => {
         return response.json();

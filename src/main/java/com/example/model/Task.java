@@ -15,7 +15,7 @@ public class Task {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(nullable = false, unique = true)
     @NotBlank
@@ -25,14 +25,14 @@ public class Task {
     @Column(nullable = false)
     @NotNull
     @Max(3)
-    private int priority;
+    private Integer priority;
 
     @Column(nullable = false)
     @NotNull
     private Date creationTime;
 
     @Column(nullable = false)
-    private boolean isRemoved;
+    private Boolean isRemoved;
 
     @ManyToOne(optional = false)
     private User user;

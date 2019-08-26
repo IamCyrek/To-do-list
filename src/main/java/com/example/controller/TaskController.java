@@ -1,11 +1,13 @@
 package com.example.controller;
 
 import com.example.model.dto.TaskDTO;
+import com.example.model.dto.TaskFilterRequest;
 import com.example.service.TaskService;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.SortDefault;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,8 +22,8 @@ public class TaskController {
     }
 
     @GetMapping
-    public List<TaskDTO> getAllTasks() {
-        return taskService.getAllTasks();
+    public List<TaskDTO> getAllTasks(@Valid TaskFilterRequest request, @SortDefault(sort = "id") Sort sort) {
+        return taskService.getAllTasks(request, sort);
     }
 
     @PostMapping
@@ -38,8 +40,6 @@ public class TaskController {
     public Map<String, Boolean> deleteTask(@RequestParam(value = "id") Long taskId) {
         taskService.deleteTask(taskId);
 
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return response;
+        return ControllerUtils.responseBuilder("deleted", Boolean.TRUE);
     }
 }

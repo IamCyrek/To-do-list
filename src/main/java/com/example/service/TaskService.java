@@ -3,9 +3,12 @@ package com.example.service;
 import com.example.exception.ResourceNotFoundException;
 import com.example.model.User;
 import com.example.model.dto.TaskDTO;
+import com.example.model.dto.TaskFilterRequest;
 import com.example.model.mapper.TaskMapper;
+import com.example.model.specification.TaskSpecification;
 import com.example.repository.TaskRepository;
 import com.example.repository.UserRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,8 +25,9 @@ public class TaskService {
         this.userRepository = userRepository;
     }
 
-    public List<TaskDTO> getAllTasks() {
-        return TaskMapper.INSTANCE.taskToTaskDTO(taskRepository.findAllByOrderByIdAsc());
+    public List<TaskDTO> getAllTasks(final TaskFilterRequest request, final Sort sort) {
+            return TaskMapper.INSTANCE.taskToTaskDTO(
+                taskRepository.findAll(TaskSpecification.getSpecification(request), sort));
     }
 
     private User findUserById(final Long userId) {
@@ -56,7 +60,14 @@ public class TaskService {
                     throw new IllegalArgumentException("Task with content '" + smth.getContent() + "' already exists!");
                 });
 
-        return saveTask(taskDTO);
+        return saveTask(
+                taskRepository.findById(taskDTO.getId())
+                        .map(task -> {
+                            taskDTO.setCreationTime(task.getCreationTime());
+                            return taskDTO;
+                        })
+                        .orElseThrow(
+                                () -> new IllegalArgumentException("Task with id " + taskDTO.getId() + " not found.")));
     }
 
     public void deleteTask(final Long taskId) {

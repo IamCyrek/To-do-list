@@ -9,7 +9,7 @@ import javax.validation.constraints.Size;
 @Data
 public class UserDTO {
 
-    private long id;
+    private Long id;
 
     @NotBlank
     @Size(min = 3, max = 255)

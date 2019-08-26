@@ -13,16 +13,19 @@ public interface TaskMapper {
 
     TaskMapper INSTANCE = Mappers.getMapper(TaskMapper.class);
 
-    @Mappings({
-            @Mapping(source = "user.id", target = "userId"),
-            @Mapping(source = "user.name", target = "name")
-    })
+    @Mapping(source = "user.id", target = "userId")
     @Named("taskToTaskDTO")
     TaskDTO taskToTaskDTO(Task task);
 
     @IterableMapping(qualifiedByName = "taskToTaskDTO")
     List<TaskDTO> taskToTaskDTO(List<Task> tasks);
 
-    @Mapping(source = "taskDTO.id", target = "id")
+    @Mappings({
+            @Mapping(source = "taskDTO.id", target = "id"),
+            @Mapping(source = "taskDTO.content", target = "content"),
+            @Mapping(source = "taskDTO.priority", target = "priority"),
+            @Mapping(source = "taskDTO.creationTime", target = "creationTime"),
+            @Mapping(source = "taskDTO.isRemoved", target = "isRemoved")
+    })
     Task taskDTOToTask(TaskDTO taskDTO, User user);
 }

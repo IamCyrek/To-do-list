@@ -2,13 +2,16 @@ package com.example.service;
 
 import com.example.exception.ResourceNotFoundException;
 import com.example.model.User;
+import com.example.model.dto.UserFilterRequest;
 import com.example.model.dto.UserUpdatePasswordDTO;
 import com.example.model.dto.UserShortDTO;
 import com.example.model.dto.UserDTO;
 import com.example.model.mapper.UserShortDtoMapper;
 import com.example.model.mapper.UserDtoMapper;
+import com.example.model.specification.UserSpecification;
 import com.example.repository.UserRepository;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,8 +29,9 @@ public class UserService {
         return DigestUtils.md5Hex(st);
     }
 
-    public List<UserShortDTO> getAllUsers() {
-        return UserShortDtoMapper.INSTANCE.userToUserShortDTO(userRepository.findAllByOrderByIdAsc());
+    public List<UserShortDTO> getAllUsers(final UserFilterRequest request, final Sort sort) {
+        return UserShortDtoMapper.INSTANCE.userToUserShortDTO(
+                userRepository.findAll(UserSpecification.getSpecification(request), sort));
     }
 
     public User createUser(final User user) {
