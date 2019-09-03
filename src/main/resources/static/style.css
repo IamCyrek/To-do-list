@@ -17,7 +17,7 @@
     display: table;
 }
 
-input {
+.headerInput {
     background: #f5f5f5;
     border: none;
     border-radius: 0;
@@ -25,10 +25,29 @@ input {
     font-size: 16px;
     margin: 0;
     padding: 10px;
+}
+
+#taskHeaderInput {
     width: 70%;
 }
 
-.addBtn {
+.headerLabel {
+    display: block;
+}
+
+.headerLabel span {
+    display: inline-block;
+    text-align: right;
+    width: 150px;
+}
+
+.headerLabel input {
+    float: none;
+    margin: 1px 0;
+    width: 40%;
+}
+
+.addBtn, .addUserBtn {
     font-size: 16px;
 }
 
@@ -36,7 +55,7 @@ input {
     font-size: 14px;
 }
 
-.addBtn, .closeDialogBtn, .addPrioritySelect {
+.addBtn, .addUserBtn, .closeDialogBtn, .addPrioritySelect {
     background: #e0e0e0;
     border: none;
     border-radius: 0;
@@ -47,12 +66,17 @@ input {
     width: 15%;
 }
 
-.addBtn:hover, .closeDialogBtn:hover, .addPrioritySelect:hover {
+.addBtn:hover, .addUserBtn:hover, .closeDialogBtn:hover, .addPrioritySelect:hover {
     background-color: #bdbdbd;
 }
 
 .addBtn, .addPrioritySelect {
     float: left;
+    padding: 10px;
+}
+
+.addUserBtn {
+    float: right;
     padding: 10px;
 }
 
@@ -81,10 +105,10 @@ input {
 
 .divRow {
     background: #fafafa;
+    cursor: pointer;
 }
 
 .divRow, .divHeader {
-    cursor: pointer;
     font-size: 18px;
     position: relative;
     transition: 0.2s;
@@ -129,14 +153,17 @@ input {
     width: 7px;
 }
 
-.divTask, .divPriority, .divTime {
+.divTask, .divPriority, .divTime, .divUser, .divCreationTime {
     float: left;
     padding-bottom: 12px;
     padding-top: 12px;
 }
 
-.divTask {
+.divTask, .divUser {
     padding-left: 40px;
+}
+
+.divTask {
     width: 50%;
 }
 
@@ -145,23 +172,30 @@ input {
     width: 15%;
 }
 
-.divTime {
+.divTime, .divCreationTime {
     padding-left: 8px;
     padding-right: 36px;
+}
+
+.divTime {
     width: 35%;
 }
 
-#divTaskHeader, #divPriorityHeader, #divTimeHeader {
+.divUser {
+    width: 50%;
+}
+
+.divCreationTime {
+    width: 50%;
+}
+
+#divTaskHeader, #divPriorityHeader, #divTimeHeader, #divUserHeader, #divCreationTimeHeader {
     text-align: center;
     z-index: 100;
 }
 
-#divTimeHeader {
+#divTimeHeader, #divCreationTimeHeader {
     padding-left: 36px;
-}
-
-.filter {
-    background-color: #e57373;
 }
 
 .close {
@@ -174,4 +208,82 @@ input {
 .close:hover {
     background-color: #ef5350;
     color: #f5f5f5;
+}
+
+
+
+.open-button {
+    background-color: #555;
+    color: white;
+    padding: 16px 20px;
+    border: none;
+    cursor: pointer;
+    opacity: 0.8;
+    position: fixed;
+}
+
+.open-button-filtration {
+    bottom: 23px;
+    right: 28px;
+    width: 280px;
+}
+
+.open-button-sorting {
+    bottom: 23px;
+    right: 336px;
+    width: 280px;
+}
+
+.form-popup {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    border: 3px solid #f1f1f1;
+    z-index: 9;
+}
+
+.form-popup-filtration {
+    right: 15px;
+}
+
+.form-popup-sorting {
+    right: 323px;
+}
+
+.form-container {
+    max-width: 300px;
+    padding: 10px;
+    background-color: white;
+}
+
+.form-container input[type=text], .form-container input[type=datetime-local], .form-container select {
+    width: 100%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    border: none;
+    background: #f1f1f1;
+}
+
+.form-container input[type=text]:focus, .form-container input[type=datetime-local]:focus, .form-container select:focus {
+    background-color: #ddd;
+    outline: none;
+}
+
+.form-container .button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px 20px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom:10px;
+    opacity: 0.8;
+}
+
+.form-container .cancel {
+    background-color: red;
+}
+
+.form-container .button:hover, .open-button:hover {
+    opacity: 1;
 }

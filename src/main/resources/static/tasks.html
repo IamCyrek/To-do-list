@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>To do list</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script defer src="tasks.js"></script>
+</head>
+<body>
+
+<div class="header">
+    <h2>My To Do List</h2>
+    <input type="text" id="taskHeaderInput" class="headerInput" placeholder="Title...">
+    <div>
+        <select id="addPrioritySelect" class="addPrioritySelect">
+            <option value="0">Low</option>
+            <option value="1">Normal</option>
+            <option value="2">High</option>
+            <option value="3">Critical</option>
+        </select>
+    </div>
+    <span tabindex="0" onkeypress="enableEnterAndSpaceKey(event)" onclick="onAddClick()"
+          class="addBtn">Add</span>
+</div>
+
+
+<div id="taskList">
+    <div class="divHeader">
+        <div id="divTaskHeader" class="divTask">Task</div>
+        <div id="divPriorityHeader" class="divPriority">Priority</div>
+        <div id="divTimeHeader" class="divTime">Time</div>
+    </div>
+</div>
+
+
+<dialog id="dialog" class="dialog">
+    <p id="closeDialogMessage"></p>
+    <button id="closeDialogButton" class="closeDialogBtn">OK</button>
+</dialog>
+
+
+<button class="open-button open-button-filtration" onclick="openFiltrationForm()">Filtration</button>
+
+<div id="filtration" class="form-popup form-popup-filtration">
+    <form class="form-container" onkeypress="return disableEnterKey(event)">
+        <label for="content"><b>Content</b></label>
+        <input type="text" placeholder="Enter content" id="content">
+
+        <label for="priority"><b>Priority</b></label>
+        <select id="priority">
+            <option value="0">All</option>
+            <option value="1">Low</option>
+            <option value="2">Normal</option>
+            <option value="3">High</option>
+            <option value="4">Critical</option>
+        </select>
+
+        <label for="startTime"><b>Start time</b></label>
+        <input type="datetime-local" id="startTime">
+
+        <label for="endTime"><b>End time</b></label>
+        <input type="datetime-local" id="endTime">
+
+        <label for="isRemoved"><b>Tasks Status</b></label>
+        <select id="isRemoved">
+            <option value="0">All</option>
+            <option value="1">Removed</option>
+            <option value="2">Not removed</option>
+        </select>
+
+        <button type="button" class="button" onclick="applyFiltrationForm()">Apply</button>
+        <button type="button" class="button cancel" onclick="closeFiltrationForm()">Close</button>
+    </form>
+</div>
+
+
+<button class="open-button open-button-sorting" onclick="openSortingForm()">Sorting</button>
+
+<div id="sorting" class="form-popup form-popup-sorting">
+    <form id="sorting-form" class="form-container" onkeypress="return disableEnterKey(event)">
+        <label for="firstSorting"><b>First sorting</b></label>
+        <select id="firstSorting">
+            <option value="0">None</option>
+            <option value="1">Content</option>
+            <option value="2">Content descending</option>
+            <option value="3">Priority</option>
+            <option value="4">Priority descending</option>
+            <option value="5">Time</option>
+            <option value="6">Time descending</option>
+            <option value="7">Task status</option>
+            <option value="8">Task status descending</option>
+        </select>
+
+        <label for="secondSorting"><b>Second sorting</b></label>
+        <select id="secondSorting">
+            <option value="0">None</option>
+            <option value="1">Content</option>
+            <option value="2">Content descending</option>
+            <option value="3">Priority</option>
+            <option value="4">Priority descending</option>
+            <option value="5">Time</option>
+            <option value="6">Time descending</option>
+            <option value="7">Task status</option>
+            <option value="8">Task status descending</option>
+        </select>
+
+        <label for="thirdSorting"><b>Third sorting</b></label>
+        <select id="thirdSorting">
+            <option value="0">None</option>
+            <option value="1">Content</option>
+            <option value="2">Content descending</option>
+            <option value="3">Priority</option>
+            <option value="4">Priority descending</option>
+            <option value="5">Time</option>
+            <option value="6">Time descending</option>
+            <option value="7">Task status</option>
+            <option value="8">Task status descending</option>
+        </select>
+
+        <label for="fourthSorting"><b>Fourth sorting</b></label>
+        <select id="fourthSorting">
+            <option value="0">None</option>
+            <option value="1">Content</option>
+            <option value="2">Content descending</option>
+            <option value="3">Priority</option>
+            <option value="4">Priority descending</option>
+            <option value="5">Time</option>
+            <option value="6">Time descending</option>
+            <option value="7">Task status</option>
+            <option value="8">Task status descending</option>
+        </select>
+
+        <button type="button" class="button" onclick="applySortingForm()">Apply</button>
+        <button type="button" class="button cancel" onclick="closeSortingForm()">Close</button>
+    </form>
+</div>
+
+</body>
+</html>

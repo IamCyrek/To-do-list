@@ -3,36 +3,12 @@
 <head>
     <title>To do list</title>
     <link rel="stylesheet" type="text/css" href="style.css">
-    <script defer src="index.js"></script>
 </head>
 <body>
 
-<div id="myDIV" class="header">
-    <h2>My To Do List</h2>
-    <input type="text" id="myInput" placeholder="Title...">
-    <div>
-        <select id="addPrioritySelect" class="addPrioritySelect">
-            <option value="0">Low</option>
-            <option value="1">Normal</option>
-            <option value="2">High</option>
-            <option value="3">Critical</option>
-        </select>
-    </div>
-    <span onclick="onAddClick()" class="addBtn">Add</span>
-</div>
-
-<div id="taskList">
-    <div class="divHeader">
-        <div id="divTaskHeader" class="divTask" onclick="divTaskHeaderClick()">Task</div>
-        <div id="divPriorityHeader" class="divPriority" onclick="divPriorityHeaderClick()">Priority</div>
-        <div id="divTimeHeader" class="divTime filter" onclick="divTimeHeaderClick()">Time</div>
-    </div>
-</div>
-
-<dialog id="dialog" class="dialog">
-    <p id="closeDialogMessage"></p>
-    <button id="closeDialogButton" class="closeDialogBtn">OK</button>
-</dialog>
+<a href="tasks.html">Tasks</a>
+<br>
+<a href="users.html">Users</a>
 
 </body>
 </html>

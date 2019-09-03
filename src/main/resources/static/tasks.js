@@ -1,14 +1,23 @@
 let tasks = [];
+let filtrationQuery = "";
+let sortingQuery = "";
 
 (getTasks = async () => {
     let response = await fetch("api/tasks");
     let json = await response.json();
 
-    for (let i = 0; i < json.length; i++)
-        createNewRow(document.getElementById("taskList"), json[i], true);
+    createRows(json);
 })();
 
+removeAllRows = () => {
+    let rows = document.getElementsByClassName("divRow");
 
+    while (rows[0]) {
+        rows[0].parentNode.removeChild(rows[0]);
+    }
+
+    tasks = [];
+};
 
 taskHasAllProperties = (task) => {
     return !(!task.hasOwnProperty("id") ||
@@ -19,12 +28,16 @@ taskHasAllProperties = (task) => {
         !task.hasOwnProperty("userId"));
 };
 
-createNewRow = (taskList, task, isAdd) => {
+createRows = (tasksOrJson) => {
+    for (let i = 0; i < tasksOrJson.length; i++)
+        createNewRow(document.getElementById("taskList"), tasksOrJson[i]);
+};
+
+createNewRow = (taskList, task) => {
     if (!taskHasAllProperties(task))
         return;
 
-    if (isAdd)
-        tasks.push(task);
+    tasks.push(task);
 
     let priority = "<span style='color:red'>Critical</span>";
     if (task.priority === 0)
@@ -70,6 +83,8 @@ createNewRow = (taskList, task, isAdd) => {
             if (myJson.hasOwnProperty("deleted") && myJson.deleted === true) {
                 tasks = tasks.filter(obj => obj.id !== taskid);
                 this.parentElement.parentElement.removeChild(this.parentElement);
+            } else {
+                showDialog("Delete failed!");
             }
         });
     };
@@ -91,9 +106,11 @@ createNewRow = (taskList, task, isAdd) => {
                     isRemoved: !task.isRemoved,
                     userId: task.userId
                 })
-            }).then((response) => {
+            })
+            .then((response) => {
                 return response.json();
-            }).then((myJson) => {
+            })
+            .then((myJson) => {
                 if (taskHasAllProperties(myJson)) {
                     task.content = myJson.content;
                     task.priority = myJson.priority;
@@ -124,17 +141,29 @@ showDialog = (text) => {
     dialog.show();
 };
 
+enableEnterAndSpaceKey = (event) => {
+    if (event.keyCode === 13 || event.keyCode === 32)
+        onAddClick();
+};
+
+taskValidation = (task) => {
+    if (task !== undefined && (task.length < 3 || task.length > 255)) {
+        showDialog("Incorrect task length!");
+        return true;
+    }
+
+    return false;
+};
+
 onAddClick = () => {
     let prioritySelect = document.getElementById("addPrioritySelect");
     let priority = prioritySelect.options[prioritySelect.selectedIndex].value;
-    let inputValue = document.getElementById("myInput").value;
+    let inputValue = document.getElementById("taskHeaderInput");
 
-    if (inputValue.toString().length < 3 || inputValue.toString().length > 255) {
-        showDialog("Incorrect task length!");
+    if (taskValidation(inputValue.value.toString()))
         return;
-    }
 
-    if (tasks.find(obj => {return obj.content === inputValue}) !== undefined) {
+    if (tasks.find(obj => {return obj.content === inputValue.value}) !== undefined) {
         showDialog("This task name is already in use!");
         return;
     }
@@ -143,127 +172,135 @@ onAddClick = () => {
         method: "POST",
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
-            content: inputValue,
+            content: inputValue.value,
             priority: priority,
             creationTime: +new Date(),
             isRemoved: false,
             userId: 1
         })
-    }).then((response) => {
+    })
+    .then((response) => {
         return response.json();
-    }).then((myJson) => {
-        createNewRow(document.getElementById("taskList"), myJson, true);
+    })
+    .then((myJson) => {
+        createNewRow(document.getElementById("taskList"), myJson);
     });
 
-    document.getElementById("myInput").value = "";
+    inputValue.value = "";
+    prioritySelect.selectedIndex = 0;
 };
 
 
 
-removeAllRows = () => {
-    let rows = document.getElementsByClassName("divRow");
-
-    while(rows[0]) {
-        rows[0].parentNode.removeChild(rows[0]);
-    }
+openFiltrationForm = () => {
+    document.getElementById("filtration").style.display = "block";
 };
 
-createRows = () => {
-    for (let i = 0; i < tasks.length; i++)
-        createNewRow(document.getElementById("taskList"), tasks[i], false);
+openSortingForm = () => {
+    document.getElementById("sorting").style.display = "block";
 };
 
-let isAscSort = true;
-
-taskHeaderAscSort = (a, b) => {
-    if (a.content > b.content)
-        return 1;
-
-    if (a.content < b.content)
-        return -1;
-
-    return 0;
+disableEnterKey = (event) => {
+    if (event.keyCode === 13)
+        return false;
 };
 
-divTaskHeaderClick = () => {
+applyFiltrationForm = async () => {
     removeAllRows();
 
-    if (!document.getElementById("divTaskHeader").classList.contains("filter")) {
-        document.getElementById("divTaskHeader").classList.add("filter");
-        document.getElementById("divPriorityHeader").classList.remove("filter");
-        document.getElementById("divTimeHeader").classList.remove("filter");
+    filtrationQuery = "";
 
-        isAscSort = true;
-    } else {
-        isAscSort = !isAscSort;
-    }
+    let content = document.getElementById("content").value;
+    if (content.length > 0)
+        filtrationQuery += "content=" + content;
 
-    if (isAscSort)
-        tasks.sort(taskHeaderAscSort);
-    else
-        tasks.sort((a, b) => taskHeaderAscSort(a, b) * -1);
+    let prioritySelect = document.getElementById("priority");
+    let priority = prioritySelect.options[prioritySelect.selectedIndex].value - 1;
+    if (priority !== -1)
+        filtrationQuery += (filtrationQuery.length > 0 ? "&" : "") + "priority=" + priority;
 
-    createRows();
+    let startTime = document.getElementById("startTime").value;
+    if (startTime.length > 0)
+        filtrationQuery += (filtrationQuery.length > 0 ? "&" : "") + "startTime=" + startTime + ":00.000";
+
+    let endTime = document.getElementById("endTime").value;
+    if (endTime.length > 0)
+        filtrationQuery += (filtrationQuery.length > 0 ? "&" : "") + "endTime=" + endTime + ":59.999";
+
+    let isRemovedSelect = document.getElementById("isRemoved");
+    let isRemoved = isRemovedSelect.options[isRemovedSelect.selectedIndex].value;
+    if (parseInt(isRemoved) === 1)
+        filtrationQuery += (filtrationQuery.length > 0 ? "&" : "") + "isRemoved=" + true;
+    else if (parseInt(isRemoved) === 2)
+        filtrationQuery += (filtrationQuery.length > 0 ? "&" : "") + "isRemoved=" + false;
+
+    await applyForms();
 };
 
-priorityHeaderAscSort = (a, b) => {
-    if (a.priority > b.priority)
-        return 1;
+createSortingQuerySubString = (elementId) => {
+    let sortingSelect = document.getElementById(elementId);
+    let sorting = parseInt(sortingSelect.options[sortingSelect.selectedIndex].value);
 
-    if (a.priority < b.priority)
-        return -1;
+    if (sorting === 0)
+        return;
 
-    return 0;
+    if (sorting === 1)
+        sortingQuery += (sortingQuery.length > 0 ? "&" : "?") + "sort=content";
+
+    if (sorting === 2)
+        sortingQuery += (sortingQuery.length > 0 ? "&" : "?") + "sort=content,desc";
+
+    if (sorting === 3)
+        sortingQuery += (sortingQuery.length > 0 ? "&" : "?") + "sort=priority";
+
+    if (sorting === 4)
+        sortingQuery += (sortingQuery.length > 0 ? "&" : "?") + "sort=priority,desc";
+
+    if (sorting === 5)
+        sortingQuery += (sortingQuery.length > 0 ? "&" : "?") + "sort=creationTime";
+
+    if (sorting === 6)
+        sortingQuery += (sortingQuery.length > 0 ? "&" : "?") + "sort=creationTime,desc";
+
+    if (sorting === 7)
+        sortingQuery += (sortingQuery.length > 0 ? "&" : "?") + "sort=isRemoved";
+
+    if (sorting === 8)
+        sortingQuery += (sortingQuery.length > 0 ? "&" : "?") + "sort=isRemoved,desc";
 };
 
-divPriorityHeaderClick = () => {
+applySortingForm = async () => {
     removeAllRows();
 
-    if (!document.getElementById("divPriorityHeader").classList.contains("filter")) {
-        document.getElementById("divTaskHeader").classList.remove("filter");
-        document.getElementById("divPriorityHeader").classList.add("filter");
-        document.getElementById("divTimeHeader").classList.remove("filter");
+    sortingQuery = "";
 
-        isAscSort = true;
-    } else {
-        isAscSort = !isAscSort;
-    }
+    createSortingQuerySubString("firstSorting");
+    createSortingQuerySubString("secondSorting");
+    createSortingQuerySubString("thirdSorting");
+    createSortingQuerySubString("fourthSorting");
 
-    if (isAscSort)
-        tasks.sort(priorityHeaderAscSort);
-    else
-        tasks.sort((a, b) => priorityHeaderAscSort(a, b) * -1);
-
-    createRows();
+    await applyForms();
 };
 
-timeHeaderAscSort = (a, b) => {
-    if (a.creationTime > b.creationTime)
-        return 1;
+applyForms = async () => {
+    let query = "";
 
-    if (a.creationTime < b.creationTime)
-        return -1;
+    if (sortingQuery.length > 0)
+        query = sortingQuery;
 
-    return 0;
+    if (filtrationQuery.length > 0)
+        query += (query.length > 0 ? "&" : "?") + filtrationQuery;
+
+    let response = await fetch("api/tasks" + query);
+    let json = await response.json();
+
+    createRows(json);
 };
 
-divTimeHeaderClick = () => {
-    removeAllRows();
+closeFiltrationForm = () => {
+    document.getElementById("filtration").style.display = "none";
+};
 
-    if (!document.getElementById("divTimeHeader").classList.contains("filter")) {
-        document.getElementById("divTaskHeader").classList.remove("filter");
-        document.getElementById("divPriorityHeader").classList.remove("filter");
-        document.getElementById("divTimeHeader").classList.add("filter");
-
-        isAscSort = true;
-    } else {
-        isAscSort = !isAscSort;
-    }
-
-    if (isAscSort)
-        tasks.sort(timeHeaderAscSort);
-    else
-        tasks.sort((a, b) => timeHeaderAscSort(a, b) * -1);
-
-    createRows();
+closeSortingForm = () => {
+    document.getElementById("sorting").style.display = "none";
 };

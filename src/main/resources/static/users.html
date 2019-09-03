@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>To do list</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script defer src="users.js"></script>
+</head>
+<body>
+
+<div class="header">
+    <h2>Add new user</h2>
+    <label class="headerLabel">
+        <span>Name</span>
+        <input type="text" id="userNameInput" class="headerInput" placeholder="Name...">
+    </label>
+    <label class="headerLabel">
+        <span>Email</span>
+        <input type="email" id="userEmailInput" class="headerInput" placeholder="Email...">
+    </label>
+    <label class="headerLabel">
+        <span>Password</span>
+        <input type="password" id="userPasswordInput" class="headerInput" placeholder="Password...">
+    </label>
+    <label class="headerLabel">
+        <span>Repeat password</span>
+        <input type="password" id="userRepeatPasswordInput" class="headerInput" placeholder="Repeat password...">
+    </label>
+    <span tabindex="0" onkeypress="enableEnterAndSpaceKey(event)" onclick="onAddClick()"
+          class="addUserBtn">Add</span>
+</div>
+
+
+
+<div id="userList">
+    <div class="divHeader">
+        <div id="divUserHeader" class="divUser">User name</div>
+        <div id="divCreationTimeHeader" class="divCreationTime">Creation time</div>
+    </div>
+</div>
+
+
+
+<dialog id="dialog" class="dialog">
+    <p id="closeDialogMessage"></p>
+    <button id="closeDialogButton" class="closeDialogBtn">OK</button>
+</dialog>
+
+
+
+<button class="open-button open-button-filtration" onclick="openFiltrationForm()">Filtration</button>
+
+<div id="filtration" class="form-popup form-popup-filtration">
+    <form class="form-container" onkeypress="return disableEnterKey(event)">
+        <label for="name"><b>Name</b></label>
+        <input type="text" placeholder="Enter name" id="name">
+
+        <label for="startTime"><b>Start time</b></label>
+        <input type="datetime-local" id="startTime">
+
+        <label for="endTime"><b>End time</b></label>
+        <input type="datetime-local" id="endTime">
+
+        <button type="button" class="button" onclick="applyFiltrationForm()">Apply</button>
+        <button type="button" class="button cancel" onclick="closeFiltrationForm()">Close</button>
+    </form>
+</div>
+
+
+
+<button class="open-button open-button-sorting" onclick="openSortingForm()">Sorting</button>
+
+<div id="sorting" class="form-popup form-popup-sorting">
+    <form id="sorting-form" class="form-container" onkeypress="return disableEnterKey(event)">
+        <label for="firstSorting"><b>First sorting</b></label>
+        <select id="firstSorting">
+            <option value="0">None</option>
+            <option value="1">Name</option>
+            <option value="2">Name descending</option>
+            <option value="3">Time</option>
+            <option value="4">Time descending</option>
+        </select>
+
+        <label for="secondSorting"><b>Second sorting</b></label>
+        <select id="secondSorting">
+            <option value="0">None</option>
+            <option value="1">Name</option>
+            <option value="2">Name descending</option>
+            <option value="3">Time</option>
+            <option value="4">Time descending</option>
+        </select>
+
+        <button type="button" class="button" onclick="applySortingForm()">Apply</button>
+        <button type="button" class="button cancel" onclick="closeSortingForm()">Close</button>
+    </form>
+</div>
+
+</body>
+</html>
