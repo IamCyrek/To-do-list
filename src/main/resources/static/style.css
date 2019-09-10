@@ -27,6 +27,10 @@
     padding: 10px;
 }
 
+.default-float {
+    float: none;
+}
+
 #taskHeaderInput {
     width: 70%;
 }
@@ -153,7 +157,7 @@
     width: 7px;
 }
 
-.divTask, .divPriority, .divTime, .divUser, .divCreationTime {
+.divTask, .divTaskUser, .divPriority, .divTime, .divUser, .divCreationTime {
     float: left;
     padding-bottom: 12px;
     padding-top: 12px;
@@ -164,12 +168,16 @@
 }
 
 .divTask {
-    width: 50%;
+    width: 40%;
+}
+
+.divTaskUser {
+    width: 10%;
 }
 
 .divPriority {
     padding-left: 8px;
-    width: 15%;
+    width: 10%;
 }
 
 .divTime, .divCreationTime {
@@ -178,7 +186,7 @@
 }
 
 .divTime {
-    width: 35%;
+    width: 30%;
 }
 
 .divUser {
@@ -189,7 +197,7 @@
     width: 50%;
 }
 
-#divTaskHeader, #divPriorityHeader, #divTimeHeader, #divUserHeader, #divCreationTimeHeader {
+#divTaskHeader, #divTaskUser, #divPriorityHeader, #divTimeHeader, #divUserHeader, #divCreationTimeHeader {
     text-align: center;
     z-index: 100;
 }
@@ -207,6 +215,18 @@
 
 .close:hover {
     background-color: #ef5350;
+    color: #f5f5f5;
+}
+
+.update {
+    padding: 12px 16px 12px 16px;
+    position: absolute;
+    right: 43px;
+    top: 0;
+}
+
+.update:hover {
+    background-color: #999;
     color: #f5f5f5;
 }
 
@@ -231,6 +251,12 @@
 .open-button-sorting {
     bottom: 23px;
     right: 336px;
+    width: 280px;
+}
+
+.open-button-update-password {
+    bottom: 23px;
+    right: 644px;
     width: 280px;
 }
 
@@ -286,4 +312,72 @@
 
 .form-container .button:hover, .open-button:hover {
     opacity: 1;
+}
+
+
+
+.modal {
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
+    display: none;
+    height: 100%;
+    left: 0;
+    overflow: auto;
+    padding-top: 100px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+}
+
+.modal-content {
+    animation-duration: 0.4s;
+    animation-name: animatetop;
+    background-color: #fefefe;
+    border: 1px solid #888;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin: auto;
+    padding: 0;
+    position: relative;
+    width: 80%;
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+}
+
+.modal-content input[type=button] {
+    background: #777;
+    cursor: pointer;
+}
+
+@-webkit-keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
+
+.closeModal {
+    color: white;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.closeModal:hover, .closeModal:focus {
+    color: #000;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.modal-header {
+    background-color: #5cb85c;
+    color: white;
+    padding: 2px 16px;
+}
+
+.modal-body {
+    padding: 2px 16px;
 }

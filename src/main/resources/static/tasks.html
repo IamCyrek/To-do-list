@@ -26,6 +26,7 @@
 <div id="taskList">
     <div class="divHeader">
         <div id="divTaskHeader" class="divTask">Task</div>
+        <div id="divTaskUser" class="divTaskUser">Task</div>
         <div id="divPriorityHeader" class="divPriority">Priority</div>
         <div id="divTimeHeader" class="divTime">Time</div>
     </div>
@@ -132,6 +133,49 @@
         <button type="button" class="button" onclick="applySortingForm()">Apply</button>
         <button type="button" class="button cancel" onclick="closeSortingForm()">Close</button>
     </form>
+</div>
+
+<div id="updateTaskModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="closeModal" onclick="closeUpdateTaskModal()">&times;</span>
+            <h2>Update task</h2>
+        </div>
+        <div class="modal-body">
+            <label class="headerLabel">
+                <span>Content</span>
+                <input type="text" id="updateTaskContentInput" class="headerInput" placeholder="Content...">
+            </label>
+            <label class="headerLabel">
+                <span>Priority</span>
+                <select id="updateTaskUserInput" class="headerInput default-float"></select>
+            </label>
+            <label class="headerLabel">
+                <span>Priority</span>
+                <select id="updateTaskPriorityInput" class="headerInput default-float">
+                    <option value="0">Low</option>
+                    <option value="1">Normal</option>
+                    <option value="2">High</option>
+                    <option value="3">Critical</option>
+                </select>
+            </label>
+            <label class="headerLabel">
+                <span>Priority</span>
+                <select id="updateTaskStatusInput" class="headerInput default-float">
+                    <option value="0">Removed</option>
+                    <option value="1">Not removed</option>
+                </select>
+            </label>
+            <label class="headerLabel">
+                <span>Time</span>
+                <input type="datetime-local" id="updateTaskTimeInput" class="headerInput" readonly>
+            </label>
+            <label class="headerLabel">
+                <span></span>
+                <input type="button" id="updateTask" value="Update" class="headerInput">
+            </label>
+        </div>
+    </div>
 </div>
 
 </body>

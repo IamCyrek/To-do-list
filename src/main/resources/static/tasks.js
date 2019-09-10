@@ -1,8 +1,10 @@
 let tasks = [];
+let users = [];
 let filtrationQuery = "";
 let sortingQuery = "";
 
 (getTasks = async () => {
+    users = await (await fetch("api/users")).json();
     let response = await fetch("api/tasks");
     let json = await response.json();
 
@@ -52,6 +54,11 @@ createNewRow = (taskList, task) => {
         return len > 0 ? new Array(len).join(chr || '0') + this : this;
     };
 
+    let user = users.find(value => value.id === task.userId);
+    if (user === undefined)
+        user = "";
+    else
+        user = user.name;
     let date = new Date((new Date(task.creationTime)).getTime() - (new Date()).getTimezoneOffset() * 60000);
     let creationTime =
         [date.getHours().padLeft(), date.getMinutes().padLeft(), date.getSeconds().padLeft()].join(':')+ ' ' +
@@ -63,10 +70,16 @@ createNewRow = (taskList, task) => {
     divRow.className = "divRow";
     divRow.innerHTML =
         "<div class='divTask'>" + task.content + "</div>" +
+        "<div class='divTaskUser'>" + user + "</div>" +
         "<div class='divPriority'>" + priority + "</div>" +
         "<div class='divTime'>" + creationTime + "</div>";
     if (task.isRemoved)
         divRow.classList.add("checked");
+
+    let updateSpan = document.createElement("SPAN");
+    updateSpan.className = "update";
+    updateSpan.appendChild(document.createTextNode("Update"));
+    updateSpan.onclick = () => openUpdateTaskModal(task);
 
     let span = document.createElement("SPAN");
     let txt = document.createTextNode("\u00D7");
@@ -88,6 +101,8 @@ createNewRow = (taskList, task) => {
             }
         });
     };
+
+    divRow.appendChild(updateSpan);
     divRow.appendChild(span);
 
     divRow.addEventListener('click', function(ev) {
@@ -303,4 +318,76 @@ closeFiltrationForm = () => {
 
 closeSortingForm = () => {
     document.getElementById("sorting").style.display = "none";
+};
+
+openUpdateTaskModal = async (task) => {
+    users = await (await fetch("api/users")).json();
+    let taskUserInput = document.getElementById("updateTaskUserInput");
+    taskUserInput.innerHTML = "";
+    for (let i = 0; i < users.length; i++) {
+        taskUserInput.innerHTML +=
+            "<option value=" + users[i].id + ">" + users[i].name + "</option>"
+    }
+    taskUserInput.value = task.userId;
+
+    document.getElementById("updateTaskModal").style.display = "block";
+
+    let content = document.getElementById("updateTaskContentInput");
+    content.value = task.content;
+    let priority = document.getElementById("updateTaskPriorityInput");
+    priority.value = task.priority;
+    let isRemoved = document.getElementById("updateTaskStatusInput");
+    isRemoved.value = task.isRemoved ? 0 : 1;
+
+    let d = new Date((new Date(task.creationTime)).getTime() - (new Date()).getTimezoneOffset() * 60000);
+    document.getElementById("updateTaskTimeInput").value =
+        [d.getFullYear().padLeft(), (d.getMonth() + 1).padLeft(), d.getDate().padLeft()].join("-") + 'T' +
+        [d.getHours().padLeft(), d.getMinutes().padLeft(), d.getSeconds().padLeft()].join(":");
+
+    document.getElementById("updateTask").onclick = function () {
+        console.log(task);
+        if (taskValidation(content.value.toString()))
+            return;
+
+        if (tasks.find(obj => {return obj.content === content.value && obj.id !== task.id}) !== undefined) {
+            showDialog("This task name is already in use!");
+            return;
+        }
+
+        fetch("api/tasks", {
+            method: "PUT",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                id: task.id,
+                content: content.value,
+                priority: priority.options[priority.selectedIndex].value,
+                creationTime: task.creationTime,
+                isRemoved: isRemoved.options[isRemoved.selectedIndex].value === "0",
+                userId: taskUserInput.options[taskUserInput.selectedIndex].value
+            })
+        })
+        .then((response) => {
+            return response.json();
+        })
+        .then(async (myJson) => {
+            if (taskHasAllProperties(myJson)) {
+                removeAllRows();
+                await applyForms();
+            } else {
+                showDialog("Update failed!");
+            }
+        });
+
+        closeUpdateTaskModal();
+    }
+};
+
+closeUpdateTaskModal = () => {
+    document.getElementById("updateTaskModal").style.display = "none";
+};
+
+window.onclick = (event) => {
+    if (event.target === document.getElementById("updateTaskModal")) {
+        document.getElementById("updateTaskModal").style.display = "none";
+    }
 };

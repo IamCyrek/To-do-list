@@ -75,6 +75,66 @@ createNewRow = (userList, user) => {
     };
 
     divRow.appendChild(span);
+
+    divRow.addEventListener('click', function(ev) {
+        document.getElementById("updateUserModal").style.display = "block";
+
+        document.getElementById("updateUserNameInput").value = user.name;
+
+        let d = new Date((new Date(user.createdAt)).getTime() - (new Date()).getTimezoneOffset() * 60000);
+        document.getElementById("updateUserCreationTimeInput").value =
+            [d.getFullYear().padLeft(), (d.getMonth() + 1).padLeft(), d.getDate().padLeft()].join("-") + 'T' +
+            [d.getHours().padLeft(), d.getMinutes().padLeft(), d.getSeconds().padLeft()].join(":");
+
+        document.getElementById("updateUser").onclick = function () {
+            let name = document.getElementById("updateUserNameInput");
+            let email = document.getElementById("updateUserEmailInput");
+            let password = document.getElementById("updateUserPasswordInput");
+
+            if (nameValidation(name.value.toString()))
+                return;
+
+            if (users.find(obj => {return obj.name === name.value && obj.id !== user.id}) !== undefined) {
+                showDialog("This user name is already in use!");
+                return;
+            }
+
+            if (emailValidation(email.value.toString()))
+                return;
+
+            if (passwordValidation(password.value.toString()))
+                return;
+
+            fetch("api/users", {
+                method: "PUT",
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    id: user.id,
+                    name: name.value,
+                    email: email.value,
+                    password: password.value,
+                    createdAt: user.createdAt
+                })
+            })
+            .then((response) => {
+                return response.json();
+            })
+            .then(async (myJson) => {
+                if (myJson.hasOwnProperty("updated") && myJson.updated === true) {
+                    removeAllRows();
+                    await applyForms();
+                } else {
+                    showDialog("Update failed!");
+                }
+
+                email.value = "";
+                password.value = "";
+            });
+
+            closeUpdateUserModal();
+        }
+    });
+
     userList.appendChild(divRow);
 };
 
@@ -264,4 +324,67 @@ closeFiltrationForm = () => {
 
 closeSortingForm = () => {
     document.getElementById("sorting").style.display = "none";
+};
+
+closeUpdateUserModal = () => {
+    document.getElementById("updateUserModal").style.display = "none";
+};
+
+openUpdatePasswordModal = () => {
+    document.getElementById("updatePasswordModal").style.display = "block";
+};
+
+closeUpdatePasswordModal = () => {
+    document.getElementById("updatePasswordModal").style.display = "none";
+};
+
+updatePassword = () => {
+    let email = document.getElementById("updateEmailInput");
+    let oldPassword = document.getElementById("oldPasswordInput");
+    let newPassword = document.getElementById("newPasswordInput");
+    let repeatPassword = document.getElementById("repeatPasswordInput");
+
+    if (emailValidation(email.value.toString()))
+        return;
+
+    if (passwordsValidation(newPassword.value, repeatPassword.value))
+        return;
+
+    if (passwordValidation(oldPassword.value.toString()) ||
+        passwordValidation(newPassword.value.toString()))
+        return;
+
+    fetch("api/users/updatePassword", {
+        method: "PUT",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            email: email.value,
+            "oldPassword": oldPassword.value,
+            "newPassword": newPassword.value
+        })
+    })
+    .then((response) => {
+        return response.json();
+    })
+    .then((myJson) => {
+        if (myJson.hasOwnProperty("updated") && myJson.updated === true)
+            return;
+
+        showDialog("Update password failed!");
+    });
+
+    closeUpdatePasswordModal();
+
+    email.value = "";
+    oldPassword.value = "";
+    newPassword.value = "";
+    repeatPassword.value = "";
+};
+
+window.onclick = (event) => {
+    if (event.target === document.getElementById("updateUserModal")) {
+        document.getElementById("updateUserModal").style.display = "none";
+    } else if (event.target === document.getElementById("updatePasswordModal")) {
+        document.getElementById("updatePasswordModal").style.display = "none";
+    }
 };

@@ -94,5 +94,73 @@
     </form>
 </div>
 
+<button class="open-button open-button-update-password"
+        onclick="openUpdatePasswordModal()">Update user password</button>
+
+
+
+<div id="updateUserModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="closeModal" onclick="closeUpdateUserModal()">&times;</span>
+            <h2>Update user</h2>
+        </div>
+        <div class="modal-body">
+            <label class="headerLabel">
+                <span>Name</span>
+                <input type="text" id="updateUserNameInput" class="headerInput" placeholder="Name...">
+            </label>
+            <label class="headerLabel">
+                <span>Creation time</span>
+                <input type="datetime-local" id="updateUserCreationTimeInput" class="headerInput" readonly>
+            </label>
+            <label class="headerLabel">
+                <span>Email</span>
+                <input type="email" id="updateUserEmailInput" class="headerInput" placeholder="Email...">
+            </label>
+            <label class="headerLabel">
+                <span>Password</span>
+                <input type="password" id="updateUserPasswordInput" class="headerInput" placeholder="Password...">
+            </label>
+            <label class="headerLabel">
+                <span></span>
+                <input type="button" id="updateUser" value="Update" class="headerInput">
+            </label>
+        </div>
+    </div>
+</div>
+
+<div id="updatePasswordModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="closeModal" onclick="closeUpdatePasswordModal()">&times;</span>
+            <h2>Update user password</h2>
+        </div>
+        <div class="modal-body">
+            <label class="headerLabel">
+                <span>Email</span>
+                <input type="email" id="updateEmailInput" class="headerInput" placeholder="Email...">
+            </label>
+            <label class="headerLabel">
+                <span>Password</span>
+                <input type="password" id="oldPasswordInput" class="headerInput" placeholder="Password...">
+            </label>
+            <label class="headerLabel">
+                <span>New password</span>
+                <input type="password" id="newPasswordInput" class="headerInput" placeholder="New password...">
+            </label>
+            <label class="headerLabel">
+                <span>Repeat password</span>
+                <input type="password" id="repeatPasswordInput" class="headerInput" placeholder="Repeat password...">
+            </label>
+            <label class="headerLabel">
+                <span></span>
+                <input type="button" id="updatePassword" value="Update password"
+                       class="headerInput" onclick="updatePassword()">
+            </label>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
