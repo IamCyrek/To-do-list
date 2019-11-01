@@ -1,0 +1,12 @@
+#errorLabel, #logoutLabel {
+    display: none;
+    font-weight: bold;
+}
+
+#errorLabel {
+    color: red;
+}
+
+#logoutLabel {
+    color: green;
+}

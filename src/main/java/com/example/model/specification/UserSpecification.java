@@ -1,8 +1,7 @@
 package com.example.model.specification;
 
+import com.example.controller.dto.UserFilterRequest;
 import com.example.model.User;
-import com.example.model.User_;
-import com.example.model.dto.UserFilterRequest;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.Date;
@@ -10,12 +9,15 @@ import java.util.Date;
 import static org.springframework.data.jpa.domain.Specification.where;
 
 public class UserSpecification {
+    private static final String NAME = "name";
+    private static final String CREATED_AT = "createdAt";
+
     private static Specification<User> hasName(final String name) {
         if (name == null)
             return null;
 
         return (root, query, builder) ->
-                builder.like(builder.lower(root.get(User_.name)), "%" + name.toLowerCase() + "%");
+                builder.like(builder.lower(root.get(NAME)), "%" + name.toLowerCase() + "%");
     }
 
     private static Specification<User> hasCreatedAt(final Date startTime, final Date endTime) {
@@ -23,12 +25,12 @@ public class UserSpecification {
             return null;
 
         if (startTime == null)
-            return (root, query, builder) -> builder.lessThanOrEqualTo(root.get(User_.createdAt), endTime);
+            return (root, query, builder) -> builder.lessThanOrEqualTo(root.get(CREATED_AT), endTime);
 
         if (endTime == null)
-            return (root, query, builder) -> builder.greaterThanOrEqualTo(root.get(User_.createdAt), startTime);
+            return (root, query, builder) -> builder.greaterThanOrEqualTo(root.get(CREATED_AT), startTime);
 
-        return (root, query, builder) -> builder.between(root.get(User_.createdAt), startTime, endTime);
+        return (root, query, builder) -> builder.between(root.get(CREATED_AT), startTime, endTime);
     }
 
 

@@ -2,7 +2,7 @@ package com.example.model.specification;
 
 import com.example.model.Task;
 import com.example.model.Task_;
-import com.example.model.dto.TaskFilterRequest;
+import com.example.controller.dto.TaskFilterRequest;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.Date;

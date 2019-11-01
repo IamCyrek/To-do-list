@@ -1,7 +1,7 @@
 package com.example.controller;
 
-import com.example.model.dto.TaskDTO;
-import com.example.model.dto.TaskFilterRequest;
+import com.example.controller.dto.TaskDTO;
+import com.example.controller.dto.TaskFilterRequest;
 import com.example.service.TaskService;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.SortDefault;
@@ -11,8 +11,10 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
+import static com.example.configuration.Constants.API_TASKS;
+
 @RestController
-@RequestMapping("/api/tasks")
+@RequestMapping(API_TASKS)
 public class TaskController {
 
     private final TaskService taskService;

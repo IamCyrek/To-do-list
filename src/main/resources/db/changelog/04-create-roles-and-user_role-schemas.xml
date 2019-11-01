@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <!--onDelete="CASCADE" onUpdate="CASCADE" check!!!-->
+    <changeSet id="04" author="IamCyrek">
+        <createTable tableName="role"
+                     remarks="A table to contain all roles">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints nullable="false" unique="true" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <insert tableName="role">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="ROLE_ADMIN"/>
+        </insert>
+
+        <insert tableName="role">
+            <column name="id" valueNumeric="2"/>
+            <column name="name" value="ROLE_USER"/>
+        </insert>
+
+        <createTable tableName="user_role"
+                     remarks="A table to contain all roles of users">
+            <column name="user_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="user_id, role_id"
+                       constraintName="pk_user_role"
+                       tableName="user_role"/>
+
+        <insert tableName="user_role">
+            <column name="user_id" valueNumeric="1"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+
+        <update tableName="user">
+            <column name="password" type="varchar(63)" value="$2a$10$dTeGKe3XjF7KWqJ2w17TZexma4UD.VkQBjDocKcYtc8AOFoahmeBe"/>
+            <where>id = 1</where>
+        </update>
+    </changeSet>
+</databaseChangeLog>

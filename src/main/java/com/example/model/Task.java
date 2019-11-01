@@ -35,6 +35,7 @@ public class Task {
     private Boolean isRemoved;
 
     @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
 }

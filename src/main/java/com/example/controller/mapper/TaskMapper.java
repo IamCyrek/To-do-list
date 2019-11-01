@@ -1,17 +1,14 @@
-package com.example.model.mapper;
+package com.example.controller.mapper;
 
 import com.example.model.Task;
 import com.example.model.User;
-import com.example.model.dto.TaskDTO;
+import com.example.controller.dto.TaskDTO;
 import org.mapstruct.*;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper
+@Mapper(componentModel="spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface TaskMapper {
-
-    TaskMapper INSTANCE = Mappers.getMapper(TaskMapper.class);
 
     @Mapping(source = "user.id", target = "userId")
     @Named("taskToTaskDTO")

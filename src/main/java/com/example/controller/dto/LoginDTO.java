@@ -1,4 +1,4 @@
-package com.example.model.dto;
+package com.example.controller.dto;
 
 import lombok.Data;
 
@@ -7,13 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Data
-public class UserDTO {
-
-    private Long id;
-
-    @NotBlank
-    @Size(min = 3, max = 255)
-    private String name;
+public class LoginDTO {
 
     @Email
     @NotBlank

@@ -2,31 +2,30 @@ package com.example.service;
 
 import com.example.exception.ResourceNotFoundException;
 import com.example.model.User;
-import com.example.model.dto.TaskDTO;
-import com.example.model.dto.TaskFilterRequest;
-import com.example.model.mapper.TaskMapper;
+import com.example.controller.dto.TaskDTO;
+import com.example.controller.dto.TaskFilterRequest;
+import com.example.controller.mapper.TaskMapper;
 import com.example.model.specification.TaskSpecification;
 import com.example.repository.TaskRepository;
 import com.example.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class TaskService {
 
     private final TaskRepository taskRepository;
 
+    private final TaskMapper taskMapper;
+
     private final UserRepository userRepository;
 
-    public TaskService(TaskRepository taskRepository, UserRepository userRepository) {
-        this.taskRepository = taskRepository;
-        this.userRepository = userRepository;
-    }
-
     public List<TaskDTO> getAllTasks(final TaskFilterRequest request, final Sort sort) {
-            return TaskMapper.INSTANCE.taskToTaskDTO(
+            return taskMapper.taskToTaskDTO(
                 taskRepository.findAll(TaskSpecification.getSpecification(request), sort));
     }
 
@@ -37,9 +36,9 @@ public class TaskService {
     }
 
     private TaskDTO saveTask(TaskDTO taskDTO) {
-        return TaskMapper.INSTANCE.taskToTaskDTO(
+        return taskMapper.taskToTaskDTO(
                 taskRepository.save(
-                        TaskMapper.INSTANCE.taskDTOToTask(
+                        taskMapper.taskDTOToTask(
                                 taskDTO,
                                 findUserById(taskDTO.getUserId())
                         )));

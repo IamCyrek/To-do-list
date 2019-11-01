@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>To do list</title>
+    <link rel="stylesheet" type="text/css" href="login.css">
+    <script defer src="login.js"></script>
+</head>
+<body>
+
+<h1>Login</h1>
+
+<div id="errorLabel">Incorrect email or password.</div>
+<div id="logoutLabel">You have been logged out successfully!</div>
+
+<form action="/login.html" method='POST'>
+    <table>
+        <tr>
+            <td><label for="email">Email:</label></td>
+            <td><input type='text' id="email" name='email' value=''></td>
+        </tr>
+        <tr>
+            <td><label for="password">Password:</label></td>
+            <td><input type='password' id="password" name='password'/></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input name="submit" type="submit" value="Submit"/>
+                <label for="registrationHref"> or </label>
+                <a id="registrationHref" href="registration.html">registration</a>
+            </td>
+        </tr>
+    </table>
+</form>
+
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>To do list</title>
+    <script defer src="registration.js"></script>
+</head>
+<body>
+
+<h1>Registration</h1>
+
+<form onkeypress="return disableEnterKey(event)">
+    <table>
+        <tr>
+            <td><label for="name">Name:</label></td>
+            <td><input type="text" placeholder="Enter name" id="name" name="name" value="" required></td>
+        </tr>
+
+        <tr>
+            <td><label for="email">Email:</label></td>
+            <td><input type="text" placeholder="Enter email" id="email" name="email" value="" required></td>
+            <!--    Someone already has that email.    -->
+        </tr>
+
+        <tr>
+            <td><label for="password">Password:</label></td>
+            <td><input type="password" placeholder="Enter password" id="password" name="password" required/></td>
+        </tr>
+
+        <tr>
+            <td><label for="matchingPassword">Repeat password:</label></td>
+            <td><input type="password" id="matchingPassword" name="matchingPassword" required/></td>
+        </tr>
+
+        <tr>
+            <td colspan="2">
+                <input name="submit" type="button" value="Submit" onclick="onSubmitClick()"/>
+
+                <label for="loginHref"> or </label>
+                <a id="loginHref" href="login.html">login</a>
+            </td>
+        </tr>
+    </table>
+</form>
+
+</body>
+</html>

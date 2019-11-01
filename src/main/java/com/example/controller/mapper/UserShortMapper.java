@@ -1,16 +1,13 @@
-package com.example.model.mapper;
+package com.example.controller.mapper;
 
 import com.example.model.User;
-import com.example.model.dto.UserShortDTO;
+import com.example.controller.dto.UserShortDTO;
 import org.mapstruct.*;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper
-public interface UserShortDtoMapper {
-
-    UserShortDtoMapper INSTANCE = Mappers.getMapper(UserShortDtoMapper.class);
+@Mapper(componentModel="spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
+public interface UserShortMapper {
 
     @Mappings({
             @Mapping(source = "id", target = "id"),
@@ -22,5 +19,4 @@ public interface UserShortDtoMapper {
 
     @IterableMapping(qualifiedByName = "userToUserShortDTO")
     List<UserShortDTO> userToUserShortDTO(List<User> users);
-
 }
