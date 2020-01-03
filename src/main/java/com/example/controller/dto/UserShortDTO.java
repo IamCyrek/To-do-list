@@ -8,6 +8,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
 
+import static com.example.configuration.Constants.DATE_TIME_FORMAT;
+
 @Data
 public class UserShortDTO {
 
@@ -18,7 +20,7 @@ public class UserShortDTO {
     private String name;
 
     @NotNull
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
+    @JsonFormat(pattern = DATE_TIME_FORMAT)
     private Date createdAt;
 
 }
