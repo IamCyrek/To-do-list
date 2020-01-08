@@ -3,7 +3,7 @@ package com.example.controller.dto;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import static com.example.configuration.Constants.DATE_TIME_FORMAT;
 
@@ -15,10 +15,10 @@ public class TaskFilterRequest {
     private Integer priority;
 
     @DateTimeFormat(pattern = DATE_TIME_FORMAT)
-    private Date startTime;
+    private LocalDateTime startTime;
 
     @DateTimeFormat(pattern = DATE_TIME_FORMAT)
-    private Date endTime;
+    private LocalDateTime endTime;
 
     private Boolean isRemoved;
 

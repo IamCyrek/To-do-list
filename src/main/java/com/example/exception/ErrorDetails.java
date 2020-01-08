@@ -3,13 +3,13 @@ package com.example.exception;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Getter
 class ErrorDetails {
 
-    private Date timestamp;
+    private LocalDateTime timestamp;
 
     private String message;
 

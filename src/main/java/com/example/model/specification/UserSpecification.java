@@ -4,7 +4,7 @@ import com.example.controller.dto.UserFilterRequest;
 import com.example.model.User;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import static org.springframework.data.jpa.domain.Specification.where;
 
@@ -20,7 +20,7 @@ public class UserSpecification {
                 builder.like(builder.lower(root.get(NAME)), "%" + name.toLowerCase() + "%");
     }
 
-    private static Specification<User> hasCreatedAt(final Date startTime, final Date endTime) {
+    private static Specification<User> hasCreatedAt(final LocalDateTime startTime, final LocalDateTime endTime) {
         if (startTime == null && endTime == null)
             return null;
 

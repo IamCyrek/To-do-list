@@ -2,9 +2,7 @@ package com.example.controller;
 
 import com.example.controller.dto.UserDTO;
 import com.example.controller.dto.UserFilterRequest;
-import com.example.controller.dto.UserShortDTO;
 import com.example.controller.mapper.UserMapper;
-import com.example.controller.mapper.UserShortMapper;
 import com.example.model.specification.UserSpecification;
 import com.example.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.example.configuration.Constants.API_USERS;
@@ -32,19 +30,17 @@ public class UserController {
 
     private final UserMapper userMapper;
 
-    private final UserShortMapper userShortMapper;
-
     @GetMapping
-    public List<UserShortDTO> getAllUsers(@Valid UserFilterRequest request, @SortDefault(sort = "id") Sort sort) {
-        return userShortMapper.userToUserShortDTO(
-                userService.getAllUsers(UserSpecification.getSpecification(request), sort));
+    public List<UserDTO> getAllUsers(@Valid UserFilterRequest request, @SortDefault(sort = "id") Sort sort) {
+        return userMapper.userToUserDTO((
+                userService.getAllUsers(UserSpecification.getSpecification(request), sort)));
     }
 
     @PostMapping(value = REGISTRATION)
     @ResponseStatus(HttpStatus.CREATED)
     public void createUser(@Valid @RequestBody UserDTO userDTO) {
         userService.createUser(
-                userMapper.userDtoToUser(userDTO, new Date()),
+                userMapper.userDtoToUser(userDTO, LocalDateTime.now()),
                 encoder
         );
     }

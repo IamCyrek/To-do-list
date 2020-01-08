@@ -5,7 +5,7 @@ import com.example.model.Task_;
 import com.example.controller.dto.TaskFilterRequest;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import static org.springframework.data.jpa.domain.Specification.where;
 
@@ -25,7 +25,7 @@ public class TaskSpecification {
         return (root, query, builder) -> builder.equal(root.get(Task_.priority), priority);
     }
 
-    private static Specification<Task> hasCreationTime(final Date startTime, final Date endTime) {
+    private static Specification<Task> hasCreationTime(final LocalDateTime startTime, final LocalDateTime endTime) {
         if (startTime == null && endTime == null)
             return null;
 

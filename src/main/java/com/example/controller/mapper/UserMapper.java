@@ -4,7 +4,7 @@ import com.example.model.User;
 import com.example.controller.dto.UserDTO;
 import org.mapstruct.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Mapper(componentModel="spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
@@ -32,5 +32,5 @@ public interface UserMapper {
             @Mapping(target = "taskSet", ignore = true),
             @Mapping(target = "roleSet", ignore = true)
     })
-    User userDtoToUser(UserDTO userDTO, Date createdAt);
+    User userDtoToUser(UserDTO userDTO, LocalDateTime createdAt);
 }

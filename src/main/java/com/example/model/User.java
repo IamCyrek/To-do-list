@@ -8,8 +8,15 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
-import java.util.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -38,7 +45,7 @@ public class User implements UserDetails {
 
     @Column(name = "created_at", nullable = false)
     @NotNull
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "user")
     @EqualsAndHashCode.Exclude

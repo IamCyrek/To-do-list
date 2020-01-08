@@ -7,7 +7,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import static com.example.configuration.Constants.DATE_TIME_FORMAT;
 
@@ -31,6 +31,6 @@ public class UserDTO {
 
     @NotNull
     @JsonFormat(pattern = DATE_TIME_FORMAT)
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
 }

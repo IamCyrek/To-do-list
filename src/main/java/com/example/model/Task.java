@@ -7,7 +7,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -29,7 +29,7 @@ public class Task {
 
     @Column(nullable = false)
     @NotNull
-    private Date creationTime;
+    private LocalDateTime creationTime;
 
     @Column(nullable = false)
     private Boolean isRemoved;
