@@ -1,6 +1,5 @@
 package com.example.service;
 
-import com.example.exception.ResourceNotFoundException;
 import com.example.model.User;
 import com.example.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,13 +23,13 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findUserByEmail(email).orElseThrow(
                 () -> new UsernameNotFoundException(
-                        String.format("User with email '%s' already exists!", email)
+                        "User with email '" + email + "' not found."
                 )
         );
     }
 
-    public List<User> getAllUsers(final Specification<User> request, final Sort sort) {
-        return userRepository.findAll(request, sort);
+    public List<User> getAllUsers(final Specification<User> specification, final Sort sort) {
+        return userRepository.findAll(specification, sort);
     }
 
     public User createUser(final User user, PasswordEncoder encoder) {
@@ -64,8 +63,6 @@ public class UserService implements UserDetailsService {
     }*/
 
     public void deleteUser(final Long userId) {
-        userRepository.deleteById(userRepository.findById(userId)
-                .map(User::getId)
-                .orElseThrow(() -> new ResourceNotFoundException("User with id = " + userId + " not found.")));
+        userRepository.deleteById(userId);
     }
 }

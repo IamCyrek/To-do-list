@@ -1,10 +1,9 @@
 package com.example.service;
 
-import com.example.exception.ResourceNotFoundException;
-import com.example.model.User;
 import com.example.controller.dto.TaskDTO;
 import com.example.controller.dto.TaskFilterRequest;
 import com.example.controller.mapper.TaskMapper;
+import com.example.model.User;
 import com.example.model.specification.TaskSpecification;
 import com.example.repository.TaskRepository;
 import com.example.repository.UserRepository;
@@ -70,9 +69,6 @@ public class TaskService {
     }
 
     public void deleteTask(final Long taskId) {
-        taskRepository.findById(taskId)
-                .orElseThrow(() -> new ResourceNotFoundException("Task with id = " + taskId + " not found."));
-
         taskRepository.deleteById(taskId);
     }
 }
